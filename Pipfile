@@ -6,7 +6,10 @@ name = "pypi"
 [packages]
 django = "*"
 django-debug-toolbar = "*"
-django-thumbnails = "*"
+psycopg2 = "*"
+pillow = "*"
+django-imagekit = "*"
+djangorestframework = "*"
 
 [dev-packages]
 black = "*"

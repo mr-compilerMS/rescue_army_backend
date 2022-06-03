@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.conf.urls.static import static
+from django.conf import settings
 
 admin.site.site_header = "Rescue Army"
 admin.site.site_title = "Rescue Army"
@@ -22,5 +24,6 @@ admin.site.site_title = "Rescue Army"
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("api/", include("backend.urls")),
     path("__debug__/", include("debug_toolbar.urls")),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

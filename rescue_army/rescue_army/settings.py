@@ -19,13 +19,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-3$$r+j!(t_g33jzh@(1&1d)7t@)bc52cjc@osl)nfz4gqfe^3a"
+SECRET_KEY = "jj+sqy2%pl201z8s0=^l)55*3(qca*z9@-v^@jah=tq^87%zpt"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -37,9 +36,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
     "debug_toolbar",
-    "thumbnails",
+    "imagekit",
     "backend",
+    "core",
 ]
 
 MIDDLEWARE = [
@@ -53,52 +54,10 @@ MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
-THUMBNAILS = {
-    "METADATA": {
-        "BACKEND": "thumbnails.backends.metadata.DatabaseBackend",
-    },
-    "STORAGE": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
-        # You can also use Amazon S3 or any other Django storage backends
-    },
-    "SIZES": {
-        "small": {
-            "PROCESSORS": [
-                {"PATH": "thumbnails.processors.resize", "width": 10, "height": 10},
-                {"PATH": "thumbnails.processors.crop", "width": 80, "height": 80},
-            ],
-            "POST_PROCESSORS": [
-                {
-                    "PATH": "thumbnails.post_processors.optimize",
-                    "png_command": 'optipng -force -o7 "%(filename)s"',
-                    "jpg_command": 'jpegoptim -f --strip-all "%(filename)s"',
-                },
-            ],
-        },
-        "large": {
-            "PROCESSORS": [
-                {"PATH": "thumbnails.processors.resize", "width": 20, "height": 20},
-                {"PATH": "thumbnails.processors.flip", "direction": "horizontal"},
-            ],
-        },
-        "watermarked": {
-            "PROCESSORS": [
-                {"PATH": "thumbnails.processors.resize", "width": 20, "height": 20},
-                # Only supports PNG. File must be of the same size with thumbnail (20 x 20 in this case)
-                {
-                    "PATH": "thumbnails.processors.add_watermark",
-                    "watermark_path": "watermark.png",
-                },
-            ],
-        },
-    },
-}
-
 INTERNAL_IPS = [
-    # ...
     "127.0.0.1",
-    # ...
 ]
+
 import mimetypes
 
 if DEBUG:
@@ -131,10 +90,11 @@ WSGI_APPLICATION = "rescue_army.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "OPTIONS": {
-            "service": "my_service",
-            "passfile": ".my_pgpass",
-        },
+        "NAME": "rescue_army",
+        "USER": "ms",
+        "PASSWORD": "ms",
+        "HOST": "localhost",
+        "PORT": "5432",
     }
 }
 
@@ -163,7 +123,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Calcutta"
 
 USE_I18N = True
 
@@ -173,9 +133,21 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
+import os
+
 STATIC_URL = "static/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = "/media/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+AUTH_USER_MODEL = "core.User"
+
+
+REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
+}
