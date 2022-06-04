@@ -1,5 +1,4 @@
 import os
-from turtle import title
 import uuid
 from django.conf import settings
 from django.db import models
