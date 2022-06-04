@@ -8,6 +8,10 @@ from imagekit.admin import AdminThumbnail
 from .models import EventVenue, Resource, Volunteer, Staff, Address, Event, EventImage
 
 
+class VolunteerAddressInline(admin.StackedInline):
+    model = Address
+
+
 @admin.register(Volunteer)
 class VolunteerAdmin(admin.ModelAdmin):
     list_display = (
@@ -25,6 +29,8 @@ class VolunteerAdmin(admin.ModelAdmin):
     search_fields = ("user__first_name", "user__last_name")
     list_filter = ("type",)
     autocomplete_fields = ["user"]
+
+    inlines = [VolunteerAddressInline]
 
     @admin.display()
     def volunteer_city(self, volunteer):

@@ -3,9 +3,11 @@ from turtle import title
 import uuid
 from django.conf import settings
 from django.db import models
-
+from django.core.validators import FileExtensionValidator
 from imagekit.models import ImageSpecField, ProcessedImageField
 from imagekit.processors import ResizeToFill
+
+from .validators import validate_file_size
 
 GENDER_MALE = "M"
 GENDER_FEMALE = "F"
@@ -132,7 +134,9 @@ class EventVenue(models.Model):
 
 class EventImage(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="images")
-    image = models.ImageField(upload_to="images/events", blank=True)
+    image = models.ImageField(
+        upload_to="images/events", blank=True  # , validator=[validate_file_size]
+    )
     alternative_text = models.CharField(max_length=255, default="Event")
     image_thumbnail = ImageSpecField(
         source="image",
@@ -164,7 +168,28 @@ class Resource(models.Model):
     title = models.CharField(max_length=255)
     upload_date = models.DateField(auto_now=True)
     description = models.TextField(blank=True)
-    file = models.FileField(upload_to="files/resources")
+    file = models.FileField(
+        upload_to="files/resources",
+        validators=[
+            FileExtensionValidator(
+                allowed_extensions=[
+                    "pdf",
+                    "docx",
+                    "doc",
+                    "ppt",
+                    "pptx",
+                    "xls",
+                    "xlsx",
+                    "csv",
+                    "txt",
+                    "jpg",
+                    "jpeg",
+                    "png",
+                    "gif",
+                ]
+            )
+        ],
+    )
     thumbnail = ProcessedImageField(
         upload_to="files/resources/cache",
         processors=[ResizeToFill(100, 60)],

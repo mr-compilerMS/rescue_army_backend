@@ -1,4 +1,6 @@
 from django.urls import include, path
+from django.contrib import admin
+
 from rest_framework.routers import DefaultRouter
 from . import views
 
@@ -6,10 +8,7 @@ from . import views
 router = DefaultRouter()
 router.register(r"events", views.EventViewSet)
 router.register(r"resources", views.ResourceViewSet)
-
-print(router.urls)
-
+router.register(r"volunteers", views.VolunteerViewSet)
 urlpatterns = [
     path("", include(router.urls)),
-    # path("events/<uuid:id>/", views.event_detail),
 ]

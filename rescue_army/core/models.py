@@ -6,32 +6,36 @@ from django.core.validators import RegexValidator
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 
+from .managers import UserManager
+
 # Create your models here.
 
 
 class User(AbstractUser):
     phone_validator = RegexValidator(
         regex=r"^\+?1?\d{9,12}$",
-        message="Phone number must be entered in the format: '+919999999999'.",
+        message="Phone number must be entered in the format: '+91XXXXXXXXXX'.",
     )
 
     phone = models.CharField(
         max_length=20,
-        help_text=_("Required"),
+        help_text=_("Phone number must be entered in the format: '+91XXXXXXXXXX'."),
         unique=True,
         validators=[phone_validator],
         error_messages={
-            "unique": _("A user with that phone number already exists."),
+            "unique": _("A user with same phone number already exists."),
         },
     )
 
     avatar = models.ImageField(upload_to="images/avatars", blank=True)
     avatar_thumbnail = ImageSpecField(
         source="avatar",
-        processors=[ResizeToFill(100, 50)],
+        processors=[ResizeToFill(100, 100)],
         format="JPEG",
         options={"quality": 60},
     )
+
+    manger = UserManager()
 
     def __str__(self) -> str:
         # return ""

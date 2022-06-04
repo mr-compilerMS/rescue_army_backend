@@ -1,9 +1,6 @@
-from turtle import title
-import uuid
 from rest_framework import serializers
 
-
-from .models import Event, EventImage, EventVenue, Resource, Staff
+from .models import Event, EventImage, EventVenue, Resource, Staff, Volunteer, Address
 
 
 class EventImageSerializer(serializers.ModelSerializer):
@@ -12,11 +9,24 @@ class EventImageSerializer(serializers.ModelSerializer):
 
     def get_image(self, obj):
         request = self.context.get("request")
-        return request.build_absolute_uri(obj.image.url)
+        try:
+            if obj.image:
+                return request.build_absolute_uri(obj.image.url)
+            else:
+                return None
+        except:
+            return None
 
     def get_image_thumbnail(self, obj):
         request = self.context.get("request")
-        return request.build_absolute_uri(obj.image_thumbnail.url)
+        try:
+            if obj.image_thumbnail:
+                return request.build_absolute_uri(obj.image_thumbnail.url)
+            else:
+                return None
+        except Exception as e:
+            print(e)
+            return None
 
     class Meta:
         model = EventImage
@@ -94,3 +104,32 @@ class ResourceSerializer(serializers.ModelSerializer):
             "thumbnail",
             "owner",
         ]
+
+
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        exclude = ["volunteer"]
+
+
+class VolunteerSerializer(serializers.ModelSerializer):
+    address = AddressSerializer()
+
+    class Meta:
+        model = Volunteer
+        fields = ["id", "gender", "birth_date", "type", "user", "address"]
+        read_only_fields = ["user"]
+
+    def update(self, instance, validated_data):
+        address = validated_data.pop("address")
+        addr = Address.objects.get(pk=instance.id)
+        address = AddressSerializer(addr, data=address)
+        address.is_valid(raise_exception=True)
+        address.save()
+        instance = super().update(instance, validated_data)
+        instance.address = address.instance
+        return instance
+
+
+class UpdateVolunteerSerializer(VolunteerSerializer):
+    address = AddressSerializer(read_only=True)
