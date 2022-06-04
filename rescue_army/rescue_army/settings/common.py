@@ -148,5 +148,3 @@ DJOSER = {
         "current_user": "core.serializers.UserSerializer",
     }
 }
-
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
