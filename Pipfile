@@ -17,6 +17,7 @@ firebase-admin = "*"
 gunicorn = "*"
 dj-database-url = "*"
 whitenoise = "*"
+django-storages = {extras = ["google"], version = "*"}
 
 [dev-packages]
 black = "*"
