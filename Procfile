@@ -1,2 +1,2 @@
 release: python rescue_army/manage.py migrate
-web: gunicorn rescue_army.rescue_army.wsgi
+web: cd rescue_army && gunicorn rescue_army.wsgi
