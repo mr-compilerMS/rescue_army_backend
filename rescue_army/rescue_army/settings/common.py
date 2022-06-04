@@ -140,3 +140,11 @@ DJOSER = {
 DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
 
 GS_BUCKET_NAME = "rescue-army.appspot.com"
+
+from google.oauth2 import service_account
+
+print(BASE_DIR)
+
+GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+    BASE_DIR / "rescue-army-firebase-adminsdk-rhxbz-14150ec586.json"
+)
