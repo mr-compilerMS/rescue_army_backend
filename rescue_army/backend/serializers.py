@@ -47,7 +47,7 @@ class EventListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ["id", "title", "start_time", "images", "get"]
+        fields = ["id", "title", "start_time", "images", "get", "is_offline"]
         ordering = ["last_updated"]
 
 
