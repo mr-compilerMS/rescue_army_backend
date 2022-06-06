@@ -197,6 +197,10 @@ class Resource(models.Model):
     )
     owner = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True)
 
+    def extension(self):
+        name, extension = os.path.splitext(self.file.name)
+        return extension
+
     def delete(self):
         try:
             file1 = self.file.path

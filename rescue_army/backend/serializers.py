@@ -92,6 +92,10 @@ class ResourceListSerializer(serializers.ModelSerializer):
 
 class ResourceSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source="owner.user.__str__")
+    extension = serializers.SerializerMethodField()
+
+    def get_extension(self, obj):
+        return obj.extension()
 
     class Meta:
         model = Resource
@@ -103,6 +107,7 @@ class ResourceSerializer(serializers.ModelSerializer):
             "file",
             "thumbnail",
             "owner",
+            "extension",
         ]
 
 
