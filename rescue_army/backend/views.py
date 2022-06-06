@@ -38,10 +38,6 @@ class ResourceViewSet(ReadOnlyModelViewSet):
     )
     serializer_class = ResourceSerializer
 
-    def list(self, request, *args, **kwargs):
-        self.serializer_class = ResourceListSerializer
-        return super().list(request, *args, **kwargs)
-
 
 class VolunteerViewSet(ModelViewSet):
     queryset = Volunteer.objects.all()
