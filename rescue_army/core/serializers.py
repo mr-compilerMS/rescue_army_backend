@@ -48,5 +48,4 @@ class UserCreateSerializer(BaseUserCreateSerializer):
             "email",
             "phone",
             "password",
-            "avatar",
         ]
