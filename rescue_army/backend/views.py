@@ -22,14 +22,14 @@ class EventViewSet(ReadOnlyModelViewSet):
     )
     serializer_class = EventSerializer
 
-    def list(self, request, *args, **kwargs):
-        self.serializer_class = EventListSerializer
-        self.queryset = (
-            Event.objects.order_by("last_updated")
-            .all()
-            .prefetch_related("images", "venues")
-        )
-        return super().list(request, *args, **kwargs)
+    # def list(self, request, *args, **kwargs):
+    #     self.serializer_class = EventListSerializer
+    #     self.queryset = (
+    #         Event.objects.order_by("last_updated")
+    #         .all()
+    #         .prefetch_related("images", "venues")
+    #     )
+    #     return super().list(request, *args, **kwargs)
 
 
 class ResourceViewSet(ReadOnlyModelViewSet):
